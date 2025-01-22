@@ -10,9 +10,9 @@ import org.springframework.http.HttpStatus;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseStructure<T> {
+public class ErrorStructure {
 
     private int status;
     private String message;
-    private T data;
+    private String rootCause;
 }
