@@ -1,5 +1,7 @@
 package com.jsp.bsm.entity;
 
+import com.jsp.bsm.enums.BloodGroup;
+import com.jsp.bsm.enums.Gender;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,29 +16,15 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int userId;
-    private String userName;
+    private String username;
     private String email;
     private String password;
     private String phoneNumber;
-    private enum bloodGroup{
-        A_POSITIVE,
-        A_NEGATIVE,
-        B_POSITIVE,
-        B_NEGATIVE,
-        O_POSITIVE,
-        O_NEGATIVE,
-        AB_POSITIVE,
-        AB_NEGATIVE
-    }
+    private BloodGroup bloodGroup;
     private LocalDate lastDonatedAt;
     private int age;
-    private enum gender{
-        MALE,
-        FEMALE
-    }
-
+    private Gender gender;
     private String availableCity;
     private boolean verified;
 
