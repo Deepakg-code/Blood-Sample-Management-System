@@ -17,21 +17,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    @Override
-    public UserResponse addUser(UserRequest userRequest) {
-        // Mapping userRequest to user entity
-        User user = User.builder()
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .age(userRequest.getAge())
-                .password(userRequest.getPassword())
-                .bloodGroup(userRequest.getBloodGroup())
-                .availableCity(userRequest.getAvailableCity())
-                .gender(userRequest.getGender())
-                .phoneNumber(userRequest.getPhoneNumber())
-                .build();
-        user = userRepository.save(user);
-
+    private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
                 .userId(user.getUserId())
                 .username(user.getUsername())
@@ -44,20 +30,33 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    private User mapToUser(UserRequest userRequest) {
+        return User.builder()
+                .username(userRequest.getUsername())
+                .email(userRequest.getEmail())
+                .age(userRequest.getAge())
+                .password(userRequest.getPassword())
+                .bloodGroup(userRequest.getBloodGroup())
+                .availableCity(userRequest.getAvailableCity())
+                .gender(userRequest.getGender())
+                .phoneNumber(userRequest.getPhoneNumber())
+                .build();
+    }
+
+    @Override
+    public UserResponse addUser(UserRequest userRequest) {
+        // Mapping userRequest to user entity
+        User user = this.mapToUser(userRequest);
+        user = userRepository.save(user);
+
+        return this.mapToUserResponse(user);
+    }
+
     @Override
     public UserResponse findUserById(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundExceptionById("User Not Found"));
-            return UserResponse.builder()
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .bloodGroup(user.getBloodGroup())
-                .lastDonatedAt(user.getLastDonatedAt())
-                .age(user.getAge())
-                .gender(user.getGender())
-                .availableCity(user.getAvailableCity())
-                .verified(user.isVerified())
-                .build();
+            return mapToUserResponse(user);
 
     }
 
@@ -76,15 +75,6 @@ public class UserServiceImpl implements UserService {
 
         User updatedUser = userRepository.save(exuser);
 
-        return UserResponse.builder()
-                .userId(updatedUser.getUserId())
-                .username(updatedUser.getUsername())
-                .bloodGroup(updatedUser.getBloodGroup())
-                .lastDonatedAt(updatedUser.getLastDonatedAt())
-                .age(updatedUser.getAge())
-                .gender(updatedUser.getGender())
-                .availableCity(updatedUser.getAvailableCity())
-                .verified(updatedUser.isVerified())
-                .build();
+        return mapToUserResponse(updatedUser);
     }
 }
