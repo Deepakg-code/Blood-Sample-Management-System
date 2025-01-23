@@ -1,6 +1,8 @@
 package com.jsp.bsm.controller;
 
 import com.jsp.bsm.entity.User;
+import com.jsp.bsm.request.UserRequest;
+import com.jsp.bsm.response.UserResponse;
 import com.jsp.bsm.service.UserService;
 import com.jsp.bsm.utility.ResponseStructure;
 import com.jsp.bsm.utility.RestResponseBuilder;
@@ -21,21 +23,21 @@ public class UserController {
     private  final RestResponseBuilder responseBuilder;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseStructure<User>> addUser(@RequestBody User user){
-        user = userService.addUser(user);
-        return responseBuilder.success(HttpStatus.CREATED, "User Created", user);
+    public ResponseEntity<ResponseStructure<UserResponse>> addUser(@RequestBody UserRequest userRequest){
+        UserResponse userResponse = userService.addUser(userRequest);
+        return responseBuilder.success(HttpStatus.CREATED, "User Created", userResponse);
     }
 
     @GetMapping("/users/{userid}")
-    public ResponseEntity<ResponseStructure<User>> findUserById(@PathVariable("userid") int userId){
-        User user = userService.findUserById(userId);
-        return responseBuilder.success(HttpStatus.FOUND, "User Found", user);
+    public ResponseEntity<ResponseStructure<UserResponse>> findUserById(@PathVariable("userid") int userId){
+        UserResponse userResponse = userService.findUserById(userId);
+        return responseBuilder.success(HttpStatus.FOUND, "User Found", userResponse);
     }
 
     @PutMapping("/users/{userid}")
-    public ResponseEntity<ResponseStructure<User>> updateUser(@PathVariable("userid") int userId, @RequestBody User user){
-        User user1 = userService.updateUserById(userId, user);
-        return responseBuilder.success(HttpStatus.OK, "User updated", user1);
+    public ResponseEntity<ResponseStructure<UserResponse>> updateUser(@PathVariable("userid") int userId, @RequestBody UserRequest userRequest){
+        UserResponse userResponse = userService.updateUserById(userId, userRequest);
+        return responseBuilder.success(HttpStatus.OK, "User updated", userResponse);
     }
 
 
