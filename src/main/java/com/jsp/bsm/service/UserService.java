@@ -1,8 +1,7 @@
 package com.jsp.bsm.service;
 
-import com.jsp.bsm.entity.User;
-import com.jsp.bsm.request.UserRequest;
-import com.jsp.bsm.response.UserResponse;
+import com.jsp.bsm.requestdto.UserRequest;
+import com.jsp.bsm.responsedto.UserResponse;
 
 public interface UserService {
 

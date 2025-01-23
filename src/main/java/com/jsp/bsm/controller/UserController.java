@@ -1,16 +1,13 @@
 package com.jsp.bsm.controller;
 
-import com.jsp.bsm.entity.User;
-import com.jsp.bsm.request.UserRequest;
-import com.jsp.bsm.response.UserResponse;
+import com.jsp.bsm.requestdto.UserRequest;
+import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.UserService;
 import com.jsp.bsm.utility.ResponseStructure;
 import com.jsp.bsm.utility.RestResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +33,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{userid}")
-    public ResponseEntity<ResponseStructure<UserResponse>> updateUser(@PathVariable("userid") int userId, @RequestBody UserRequest userRequest){
+    public ResponseEntity<ResponseStructure<UserResponse>> updateUser(@PathVariable("userid") int userId, @RequestBody @Valid UserRequest userRequest){
         UserResponse userResponse = userService.updateUserById(userId, userRequest);
         return responseBuilder.success(HttpStatus.OK, "User updated", userResponse);
     }

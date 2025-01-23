@@ -3,13 +3,11 @@ package com.jsp.bsm.serviceimpl;
 import com.jsp.bsm.entity.User;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.UserRepository;
-import com.jsp.bsm.request.UserRequest;
-import com.jsp.bsm.response.UserResponse;
+import com.jsp.bsm.requestdto.UserRequest;
+import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService {
 
         User user = this.mapToUser(userRequest, exuser);
 
-        User updatedUser = userRepository.save(exuser);
+        User updatedUser = userRepository.save(user);
 
         return mapToUserResponse(updatedUser);
     }

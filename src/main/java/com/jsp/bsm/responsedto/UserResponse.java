@@ -1,4 +1,4 @@
-package com.jsp.bsm.response;
+package com.jsp.bsm.responsedto;
 
 import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.enums.Gender;

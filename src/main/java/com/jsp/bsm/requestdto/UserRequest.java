@@ -1,4 +1,4 @@
-package com.jsp.bsm.request;
+package com.jsp.bsm.requestdto;
 
 import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.enums.Gender;
@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 @Data
 @Builder
 @AllArgsConstructor
