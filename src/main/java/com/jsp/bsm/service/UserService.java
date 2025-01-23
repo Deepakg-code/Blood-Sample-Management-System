@@ -1,13 +1,15 @@
 package com.jsp.bsm.service;
 
 import com.jsp.bsm.entity.User;
+import com.jsp.bsm.request.UserRequest;
+import com.jsp.bsm.response.UserResponse;
 
 public interface UserService {
 
-   public User addUser(User user);
+   public UserResponse addUser(UserRequest userRequest);
 
-   public User findUserById(int userId);
+   public UserResponse findUserById(int userId);
 
-   public User updateUserById(int userId, User user);
+   public UserResponse updateUserById(int userId, UserRequest userRequest);
 
 }

@@ -3,6 +3,8 @@ package com.jsp.bsm.serviceimpl;
 import com.jsp.bsm.entity.User;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.UserRepository;
+import com.jsp.bsm.request.UserRequest;
+import com.jsp.bsm.response.UserResponse;
 import com.jsp.bsm.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,37 +18,73 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User addUser(User user) {
-        return userRepository.save(user);
+    public UserResponse addUser(UserRequest userRequest) {
+        // Mapping userRequest to user entity
+        User user = User.builder()
+                .username(userRequest.getUsername())
+                .email(userRequest.getEmail())
+                .age(userRequest.getAge())
+                .password(userRequest.getPassword())
+                .bloodGroup(userRequest.getBloodGroup())
+                .availableCity(userRequest.getAvailableCity())
+                .gender(userRequest.getGender())
+                .phoneNumber(userRequest.getPhoneNumber())
+                .build();
+        user = userRepository.save(user);
+
+        return UserResponse.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .bloodGroup(user.getBloodGroup())
+                .lastDonatedAt(user.getLastDonatedAt())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .availableCity(user.getAvailableCity())
+                .verified(user.isVerified())
+                .build();
     }
 
     @Override
-    public User findUserById(int userId) {
-        Optional<User> optional = userRepository.findById(userId);
-        if (optional.isEmpty())
-            throw new UserNotFoundExceptionById("User Not Found");
-        return optional.get();
+    public UserResponse findUserById(int userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundExceptionById("User Not Found"));
+            return UserResponse.builder()
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .bloodGroup(user.getBloodGroup())
+                .lastDonatedAt(user.getLastDonatedAt())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .availableCity(user.getAvailableCity())
+                .verified(user.isVerified())
+                .build();
 
     }
 
     @Override
-    public User updateUserById(int userId, User user) {
-        Optional<User> optional = userRepository.findById(userId);
-        if(optional.isPresent()){
-            User exuser = optional.get();
-            exuser.setUsername(user.getUsername());
-            exuser.setPhoneNumber(user.getPhoneNumber());
-            exuser.setAge(user.getAge());
-            exuser.setEmail(user.getEmail());
-            exuser.setPassword(user.getPassword());
-            exuser.setBloodGroup(user.getBloodGroup());
-            exuser.setGender(user.getGender());
-            exuser.setAvailableCity(user.getAvailableCity());
-            exuser.setVerified(user.isVerified());
-            return userRepository.save(exuser);
-        }
-        else {
-            throw new UserNotFoundExceptionById("User Not Get Updated");
-        }
+    public UserResponse updateUserById(int userId, UserRequest userRequest) {
+        User exuser = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundExceptionById("User not found"));
+            exuser.setUsername(userRequest.getUsername());
+            exuser.setPhoneNumber(userRequest.getPhoneNumber());
+            exuser.setAge(userRequest.getAge());
+            exuser.setEmail(userRequest.getEmail());
+            exuser.setPassword(userRequest.getPassword());
+            exuser.setBloodGroup(userRequest.getBloodGroup());
+            exuser.setGender(userRequest.getGender());
+            exuser.setAvailableCity(userRequest.getAvailableCity());
+
+        User updatedUser = userRepository.save(exuser);
+
+        return UserResponse.builder()
+                .userId(updatedUser.getUserId())
+                .username(updatedUser.getUsername())
+                .bloodGroup(updatedUser.getBloodGroup())
+                .lastDonatedAt(updatedUser.getLastDonatedAt())
+                .age(updatedUser.getAge())
+                .gender(updatedUser.getGender())
+                .availableCity(updatedUser.getAvailableCity())
+                .verified(updatedUser.isVerified())
+                .build();
     }
 }
