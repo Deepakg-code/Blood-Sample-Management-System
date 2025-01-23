@@ -30,23 +30,21 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    private User mapToUser(UserRequest userRequest) {
-        return User.builder()
-                .username(userRequest.getUsername())
-                .email(userRequest.getEmail())
-                .age(userRequest.getAge())
-                .password(userRequest.getPassword())
-                .bloodGroup(userRequest.getBloodGroup())
-                .availableCity(userRequest.getAvailableCity())
-                .gender(userRequest.getGender())
-                .phoneNumber(userRequest.getPhoneNumber())
-                .build();
+    private User mapToUser(UserRequest userRequest, User user) {
+        user.setUsername(userRequest.getUsername());
+        user.setPhoneNumber(userRequest.getPhoneNumber());
+        user.setAge(userRequest.getAge());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(userRequest.getPassword());
+        user.setBloodGroup(userRequest.getBloodGroup());user.setGender(userRequest.getGender());
+        user.setAvailableCity(userRequest.getAvailableCity());
+        return user;
     }
 
     @Override
     public UserResponse addUser(UserRequest userRequest) {
         // Mapping userRequest to user entity
-        User user = this.mapToUser(userRequest);
+        User user = this.mapToUser(userRequest, new User());
         user = userRepository.save(user);
 
         return this.mapToUserResponse(user);
@@ -63,15 +61,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse updateUserById(int userId, UserRequest userRequest) {
         User exuser = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundExceptionById("User not found"));
-            exuser.setUsername(userRequest.getUsername());
-            exuser.setPhoneNumber(userRequest.getPhoneNumber());
-            exuser.setAge(userRequest.getAge());
-            exuser.setEmail(userRequest.getEmail());
-            exuser.setPassword(userRequest.getPassword());
-            exuser.setBloodGroup(userRequest.getBloodGroup());
-            exuser.setGender(userRequest.getGender());
-            exuser.setAvailableCity(userRequest.getAvailableCity());
+                .orElseThrow(() -> new UserNotFoundExceptionById("Failed to update"));
+
+        User user = this.mapToUser(userRequest, exuser);
 
         User updatedUser = userRepository.save(exuser);
 
