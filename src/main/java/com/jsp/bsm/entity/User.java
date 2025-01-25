@@ -1,11 +1,10 @@
 package com.jsp.bsm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.enums.Gender;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.jsp.bsm.enums.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,8 +32,11 @@ public class User {
     private Gender gender;
     private String availableCity;
     private boolean verified;
+    private Role role;
 
-
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonBackReference
+    private Admin admin;
 
 
 }
