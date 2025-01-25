@@ -2,6 +2,7 @@ package com.jsp.bsm.responsedto;
 
 import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.enums.Gender;
+import com.jsp.bsm.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class UserResponse {
     private Gender gender;
     private String availableCity;
     private boolean verified;
+    private Role role;
 
 
 }
