@@ -39,4 +39,10 @@ public class UserController {
     }
 
 
+    @PostMapping("/register-admin")
+    public ResponseEntity<ResponseStructure<UserResponse>> addUserAsAdmin(@RequestBody UserRequest userRequest){
+        UserResponse userResponse = userService.addUserAsAdmin(userRequest);
+        return responseBuilder.success(HttpStatus.CREATED, "User Created", userResponse);
+    }
+
 }

@@ -1,12 +1,17 @@
 package com.jsp.bsm.serviceimpl;
 
+import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.User;
+import com.jsp.bsm.enums.AdminType;
+import com.jsp.bsm.enums.Role;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
+import com.jsp.bsm.repository.AdminRepository;
 import com.jsp.bsm.repository.UserRepository;
 import com.jsp.bsm.requestdto.UserRequest;
 import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +19,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final AdminRepository adminRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
@@ -25,6 +34,7 @@ public class UserServiceImpl implements UserService {
                 .gender(user.getGender())
                 .availableCity(user.getAvailableCity())
                 .verified(user.isVerified())
+                .role(user.getRole())
                 .build();
     }
 
@@ -43,6 +53,8 @@ public class UserServiceImpl implements UserService {
     public UserResponse addUser(UserRequest userRequest) {
         // Mapping userRequest to user entity
         User user = this.mapToUser(userRequest, new User());
+        user.setRole(Role.USER);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = userRepository.save(user);
 
         return this.mapToUserResponse(user);
@@ -66,5 +78,21 @@ public class UserServiceImpl implements UserService {
         User updatedUser = userRepository.save(user);
 
         return mapToUserResponse(updatedUser);
+    }
+
+    @Override
+    public UserResponse addUserAsAdmin(UserRequest userRequest) {
+        User user = this.mapToUser(userRequest, new User());
+        user.setRole(Role.ADMIN);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+
+        UserResponse userResponse = this.mapToUserResponse(user);
+        Admin admin = Admin.builder()
+                .user(user)
+                .adminType(AdminType.valueOf("OWNER"))
+                .build();
+        adminRepository.save(admin);
+        return userResponse;
     }
 }
