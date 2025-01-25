@@ -28,4 +28,5 @@ public class Admin {
     @Enumerated(EnumType.STRING)
     private AdminType adminType;
 
+
 }
