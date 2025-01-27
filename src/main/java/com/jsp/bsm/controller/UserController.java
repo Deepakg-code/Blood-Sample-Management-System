@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,15 +27,15 @@ public class UserController {
         return responseBuilder.success(HttpStatus.CREATED, "User Created", userResponse);
     }
 
-    @GetMapping("/users/{userid}")
-    public ResponseEntity<ResponseStructure<UserResponse>> findUserById(@PathVariable("userid") int userId){
-        UserResponse userResponse = userService.findUserById(userId);
+    @GetMapping("/users")
+    public ResponseEntity<ResponseStructure<UserResponse>> findUserById(){
+        UserResponse userResponse = userService.findUserById();
         return responseBuilder.success(HttpStatus.FOUND, "User Found", userResponse);
     }
 
-    @PutMapping("/users/{userid}")
-    public ResponseEntity<ResponseStructure<UserResponse>> updateUser(@PathVariable("userid") int userId, @RequestBody @Valid UserRequest userRequest){
-        UserResponse userResponse = userService.updateUserById(userId, userRequest);
+    @PutMapping("/users")
+    public ResponseEntity<ResponseStructure<UserResponse>> updateUser(@RequestBody @Valid UserRequest userRequest){
+        UserResponse userResponse = userService.updateUserById(userRequest);
         return responseBuilder.success(HttpStatus.OK, "User updated", userResponse);
     }
 
@@ -45,4 +46,10 @@ public class UserController {
         return responseBuilder.success(HttpStatus.CREATED, "User Created", userResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PatchMapping("/users/{userId}")
+    public ResponseEntity<ResponseStructure<UserResponse>> verifyStatus(@PathVariable int userId, @RequestParam boolean isVerified) {
+        UserResponse userResponse = userService.verifyStatus(userId, isVerified);
+        return responseBuilder.success(HttpStatus.OK,"Status Updated", userResponse);
+    }
 }

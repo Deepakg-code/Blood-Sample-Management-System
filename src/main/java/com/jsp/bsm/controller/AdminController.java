@@ -9,10 +9,8 @@ import com.jsp.bsm.utility.RestResponseBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -21,7 +19,8 @@ public class AdminController {
     private final AdminService adminService;
     private final RestResponseBuilder responseBuilder;
 
-    @PostMapping("/admins/{userId}")
+    @PreAuthorize("hasAuthority('OWNER_ADMIN')")
+    @PutMapping("/users/{userId}")
     public ResponseEntity<ResponseStructure<AdminResponse>> promoteUserToAdmin(@PathVariable int userId){
         AdminResponse adminResponse = adminService.promoteUserToAdmin(userId);
         return responseBuilder.success(HttpStatus.CREATED, "Admin Created", adminResponse);

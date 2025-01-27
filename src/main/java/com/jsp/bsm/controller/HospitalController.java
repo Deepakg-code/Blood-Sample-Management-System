@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,7 @@ public class HospitalController {
 
     private final RestResponseBuilder responseBuilder;
 
+    @PreAuthorize("hasAuthority('OWNER_ADMIN')")
     @PostMapping("/hospitals")
     public ResponseEntity<ResponseStructure<HospitalResponse>> addHospital(@RequestBody @Valid HospitalRequest hospitalRequest){
         HospitalResponse hospitalResponse = hospitalService.addHospital(hospitalRequest);
@@ -31,13 +33,14 @@ public class HospitalController {
         HospitalResponse hospitalResponse = hospitalService.findHospitalById(hospitalId);
         return responseBuilder.success(HttpStatus.FOUND, "Hospital Found", hospitalResponse);
     }
-
+    @PreAuthorize("hasAuthority('GUEST_ADMIN')")
     @PutMapping("/hospitals/{hospitalId}")
     public ResponseEntity<ResponseStructure<HospitalResponse>> updateHospitalById(@PathVariable int hospitalId, @RequestBody @Valid HospitalRequest hospitalRequest){
         HospitalResponse hospitalResponse = hospitalService.updateHospitalById(hospitalId, hospitalRequest);
         return  responseBuilder.success(HttpStatus.OK, "Hospital Updated", hospitalResponse);
     }
 
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN')")
     @PostMapping("/hospitals-admin/{adminId}")
     public ResponseEntity<ResponseStructure<HospitalResponse>> addAdminHospital(@RequestBody HospitalRequest hospitalRequest, @PathVariable int adminId){
         HospitalResponse hospitalResponse = hospitalService.addAdminHospital(hospitalRequest, adminId);
