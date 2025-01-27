@@ -35,7 +35,6 @@ public class User {
     private Role role;
 
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonBackReference
     private Admin admin;
 
 
