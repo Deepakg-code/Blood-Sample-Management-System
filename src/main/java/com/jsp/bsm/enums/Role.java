@@ -2,5 +2,6 @@ package com.jsp.bsm.enums;
 
 public enum Role {
     USER,
-    ADMIN
+    OWNER_ADMIN,
+    GUEST_ADMIN
 }
