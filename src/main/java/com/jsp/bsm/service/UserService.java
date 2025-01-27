@@ -8,9 +8,11 @@ public interface UserService {
 
    public UserResponse addUser(UserRequest userRequest);
 
-   public UserResponse findUserById(int userId);
+   public UserResponse findUserById();
 
-   public UserResponse updateUserById(int userId, UserRequest userRequest);
+   public UserResponse updateUserById(UserRequest userRequest);
 
    UserResponse addUserAsAdmin(@Valid UserRequest userRequest);
+
+    UserResponse verifyStatus(int userId, boolean isVerified);
 }
