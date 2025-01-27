@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(userRequest.getPassword());
         user.setBloodGroup(userRequest.getBloodGroup());user.setGender(userRequest.getGender());
         user.setAvailableCity(userRequest.getAvailableCity());
+        user.setLastDonatedAt(userRequest.getLastDonatedAt());
         return user;
     }
 
