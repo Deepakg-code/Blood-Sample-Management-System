@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -45,4 +47,6 @@ public class UserRequest {
     @NotNull(message = "city cannot be null")
     @NotBlank(message = "city cannot be blank")
     private String availableCity;
+
+    private LocalDate lastDonatedAt;
 }
