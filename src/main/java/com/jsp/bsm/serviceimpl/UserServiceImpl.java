@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -100,5 +102,13 @@ public class UserServiceImpl implements UserService {
         user.setVerified(status);
         userRepository.save(user);
         return this.mapToUserResponse(user);
+    }
+
+    @Override
+    public UserResponse lastDonatedAt(LocalDate lastDonatedAt) {
+        User user = authUtil.getCurrentUser();
+        user.setLastDonatedAt(lastDonatedAt);
+        User updatedUser = userRepository.save(user);
+        return this.mapToUserResponse(updatedUser);
     }
 }
