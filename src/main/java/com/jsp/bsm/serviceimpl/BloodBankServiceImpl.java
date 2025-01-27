@@ -2,19 +2,13 @@ package com.jsp.bsm.serviceimpl;
 
 import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.BloodBank;
-import com.jsp.bsm.entity.Hospital;
-import com.jsp.bsm.entity.User;
-import com.jsp.bsm.enums.AdminType;
 import com.jsp.bsm.enums.Role;
 import com.jsp.bsm.exception.BloodBankNotFoundExceptionById;
-import com.jsp.bsm.exception.HospitalNotFoundException;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.AdminRepository;
 import com.jsp.bsm.repository.BloodRepository;
 import com.jsp.bsm.requestdto.BloodBankRequest;
-import com.jsp.bsm.requestdto.UserRequest;
 import com.jsp.bsm.responsedto.BloodBankResponse;
-import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.BloodBankService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -89,7 +83,6 @@ public class BloodBankServiceImpl implements BloodBankService {
                 .name(bankRequest.getName())
                 .emergencyUnitCount(bankRequest.getEmergencyUnitCount())
                 .build();
-        admin.setAdminType(AdminType.OWNER);
         bloodRepository.save(bloodBank);
         return this.mapToBloodBankResponse(bloodBank);
     }

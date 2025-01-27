@@ -2,7 +2,6 @@ package com.jsp.bsm.serviceimpl;
 
 import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.User;
-import com.jsp.bsm.enums.AdminType;
 import com.jsp.bsm.enums.Role;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.AdminRepository;
@@ -26,17 +25,13 @@ public class AdminServiceImpl implements AdminService {
     public AdminResponse promoteUserToAdmin(int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundExceptionById("User Not Found"));
+        user.setRole(Role.GUEST_ADMIN);
+        userRepository.save(user);
 
         Admin admin = Admin.builder()
-                .adminType(AdminType.OWNER)
+                .user(user)
                 .build();
         Admin savedAdmin = adminRepository.save(admin);
-
-
-        user.setRole(Role.ADMIN);
-        user.setAdmin(savedAdmin);
-        savedAdmin.setUser(user);
-        userRepository.save(user);
 
         return AdminResponse.builder()
                 .adminId(savedAdmin.getAdminId())

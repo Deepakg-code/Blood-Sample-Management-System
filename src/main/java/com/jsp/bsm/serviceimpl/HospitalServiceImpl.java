@@ -2,7 +2,7 @@ package com.jsp.bsm.serviceimpl;
 
 import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.Hospital;
-import com.jsp.bsm.enums.AdminType;
+import com.jsp.bsm.enums.Role;
 import com.jsp.bsm.exception.HospitalNotFoundException;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.AdminRepository;
@@ -74,7 +74,6 @@ public class HospitalServiceImpl implements HospitalService {
                 .admin(admins)
                 .name(hospitalRequest.getName())
                 .build();
-        admin.setAdminType(AdminType.OWNER);
         hospital=hospitalRepository.save(hospital);
         return this.mapToHospitalResponse(hospital);
     }

@@ -1,12 +1,9 @@
 package com.jsp.bsm.serviceimpl;
 
-import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.BloodBank;
 import com.jsp.bsm.entity.Sample;
-import com.jsp.bsm.enums.AdminType;
 import com.jsp.bsm.exception.BloodBankNotFoundExceptionById;
 import com.jsp.bsm.exception.SampleNotFoundException;
-import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.BloodRepository;
 import com.jsp.bsm.repository.SampleRepository;
 import com.jsp.bsm.requestdto.SampleRequest;
@@ -15,7 +12,6 @@ import com.jsp.bsm.service.SampleService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
