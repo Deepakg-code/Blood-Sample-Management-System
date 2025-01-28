@@ -68,13 +68,17 @@ public class HospitalServiceImpl implements HospitalService {
     public HospitalResponse addAdminHospital(HospitalRequest hospitalRequest, int adminId) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(()-> new UserNotFoundExceptionById("Admin Not Found"));
-        List<Admin> admins = new ArrayList<>();
-        admins.add(admin);
         Hospital hospital = Hospital.builder()
-                .admin(admins)
                 .name(hospitalRequest.getName())
                 .build();
-        hospital=hospitalRepository.save(hospital);
+
+        hospital = hospitalRepository.save(hospital);
+        List<Admin> admins = new ArrayList<>();
+        admins.add(admin);
+        hospital.setAdmin(admins);
+
+        admin.setHospital(hospital);
+        adminRepository.save(admin);
         return this.mapToHospitalResponse(hospital);
     }
 }
