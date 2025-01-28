@@ -48,7 +48,7 @@ public class UserController {
         return responseBuilder.success(HttpStatus.CREATED, "User Created", userResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @PatchMapping("/users/{userId}")
     public ResponseEntity<ResponseStructure<UserResponse>> verifyStatus(@PathVariable int userId, @RequestParam boolean isVerified) {
         UserResponse userResponse = userService.verifyStatus(userId, isVerified);

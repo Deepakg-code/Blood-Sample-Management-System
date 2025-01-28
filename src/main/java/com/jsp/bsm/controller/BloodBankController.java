@@ -45,7 +45,7 @@ public class BloodBankController {
         return responseBuilder.success(HttpStatus.FOUND, "BloodBanks Found", bankResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @PutMapping("/bloodbanks/{bankId}")
     public ResponseEntity<ResponseStructure<BloodBankResponse>> updateBloodBankById(@PathVariable int bankId, @RequestBody @Valid BloodBankRequest bankRequest){
         BloodBankResponse bankResponse = bankService.updateBloodBankById(bankId, bankRequest);

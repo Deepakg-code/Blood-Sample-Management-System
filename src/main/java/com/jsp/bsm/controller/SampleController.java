@@ -20,21 +20,21 @@ public class SampleController {
     private SampleService sampleService;
     private RestResponseBuilder responseBuilder;
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @PostMapping("/samples")
     public ResponseEntity<ResponseStructure<SampleResponse>> addSample(@RequestBody SampleRequest sampleRequest){
          SampleResponse sampleResponse = sampleService.addSample(sampleRequest);
         return responseBuilder.success(HttpStatus.CREATED, "Sample Created", sampleResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @GetMapping("/samples/{sampleId}")
     public ResponseEntity<ResponseStructure<SampleResponse>> findSampleById(@PathVariable int sampleId){
         SampleResponse sampleResponse = sampleService.findSampleById(sampleId);
         return responseBuilder.success(HttpStatus.FOUND, "BloodBank Found", sampleResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @GetMapping("/samples")
     public ResponseEntity<ResponseStructure<List<SampleResponse>>> findAllSamples(){
         List<SampleResponse> sampleResponses = sampleService.findAllSamples();
@@ -47,7 +47,7 @@ public class SampleController {
         return responseBuilder.success(HttpStatus.FOUND, "Sample Updated", sampleResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
     @PostMapping("/samples-bank/{bankId}")
     public ResponseEntity<ResponseStructure<SampleResponse>> addSampleToBank(@RequestBody SampleRequest sampleRequest, @PathVariable int bankId){
         SampleResponse sampleResponse = sampleService.addSampleToBank(sampleRequest, bankId);
