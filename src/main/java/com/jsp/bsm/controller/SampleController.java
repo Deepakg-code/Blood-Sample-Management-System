@@ -21,10 +21,10 @@ public class SampleController {
     private RestResponseBuilder responseBuilder;
 
     @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
-    @PostMapping("/samples")
-    public ResponseEntity<ResponseStructure<SampleResponse>> addSample(@RequestBody SampleRequest sampleRequest){
-         SampleResponse sampleResponse = sampleService.addSample(sampleRequest);
-        return responseBuilder.success(HttpStatus.CREATED, "Sample Created", sampleResponse);
+    @PostMapping("/samples-bank/{bankId}")
+    public ResponseEntity<ResponseStructure<SampleResponse>> addSampleToBank(@RequestBody SampleRequest sampleRequest, @PathVariable int bankId){
+        SampleResponse sampleResponse = sampleService.addSampleToBank(sampleRequest, bankId);
+        return responseBuilder.success(HttpStatus.CREATED, "Samples to blood bank added", sampleResponse);
     }
 
     @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
@@ -46,13 +46,5 @@ public class SampleController {
         SampleResponse sampleResponse = sampleService.updateSampleId(sampleId, sampleRequest);
         return responseBuilder.success(HttpStatus.FOUND, "Sample Updated", sampleResponse);
     }
-
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
-    @PostMapping("/samples-bank/{bankId}")
-    public ResponseEntity<ResponseStructure<SampleResponse>> addSampleToBank(@RequestBody SampleRequest sampleRequest, @PathVariable int bankId){
-        SampleResponse sampleResponse = sampleService.addSampleToBank(sampleRequest, bankId);
-        return responseBuilder.success(HttpStatus.CREATED, "Samples to blood bank added", sampleResponse);
-    }
-
 
 }
