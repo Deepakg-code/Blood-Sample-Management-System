@@ -1,9 +1,8 @@
 package com.jsp.bsm.serviceimpl;
 
-import com.jsp.bsm.entity.Address;
 import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.BloodBank;
-import com.jsp.bsm.enums.Role;
+import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.exception.BloodBankNotFoundExceptionById;
 import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.AdminRepository;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,13 +39,6 @@ public class BloodBankServiceImpl implements BloodBankService {
     }
 
     @Override
-    public BloodBankResponse addBloodBank(BloodBankRequest bankRequest) {
-        BloodBank bloodBank = mapToBloodBank(bankRequest, new BloodBank());
-        bloodBank = bloodRepository.save(bloodBank);
-        return mapToBloodBankResponse(bloodBank);
-    }
-
-    @Override
     public BloodBankResponse findBloodBankById(int bankId) {
         BloodBank bloodBank = bloodRepository.findById(bankId)
                 .orElseThrow(()->new BloodBankNotFoundExceptionById("Blood Bank Not Found"));
@@ -55,13 +46,13 @@ public class BloodBankServiceImpl implements BloodBankService {
     }
 
     @Override
-    public List<BloodBankResponse> findAllBloodBankByCity(List<String> city) {
-        List<BloodBank> bloodBanks = bloodRepository.findByAddress_CityIn(city);
+    public List<BloodBankResponse> findAllBloodBankByCity(List<String> city, BloodGroup bloodGroup) {
+        List<BloodBank> bloodBanks = bloodRepository.findByAddress_CityInAndSamples_BloodGroup(city, bloodGroup);
         if (bloodBanks.isEmpty()) {
-            throw new RuntimeException("No blood banks found in the provided cities");
+            throw new BloodBankNotFoundExceptionById("No blood banks found in the provided cities and bloodGroup");
         }
         return bloodBanks.stream()
-                .map(this::mapToBloodBankResponse) // Mapping each BloodBank to BloodBankResponse
+                .map(this::mapToBloodBankResponse)
                 .collect(Collectors.toList());
     }
 
@@ -79,14 +70,18 @@ public class BloodBankServiceImpl implements BloodBankService {
     public BloodBankResponse addAdminBank(BloodBankRequest bankRequest, int adminId) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(()-> new UserNotFoundExceptionById("Admin Not Found"));
-        List<Admin> admins = new ArrayList<>();
-        admins.add(admin);
         BloodBank bloodBank = BloodBank.builder()
-                .admin(admins)
                 .name(bankRequest.getName())
                 .emergencyUnitCount(bankRequest.getEmergencyUnitCount())
                 .build();
         bloodRepository.save(bloodBank);
+
+        List<Admin> admins = new ArrayList<>();
+        admins.add(admin);
+        bloodBank.setAdmin(admins);
+
+        admin.setBloodBank(bloodBank);
+        adminRepository.save(admin);
         return this.mapToBloodBankResponse(bloodBank);
     }
 
