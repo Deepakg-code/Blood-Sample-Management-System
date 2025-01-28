@@ -21,11 +21,11 @@ public class HospitalController {
 
     private final RestResponseBuilder responseBuilder;
 
-    @PreAuthorize("hasAuthority('OWNER_ADMIN')")
-    @PostMapping("/hospitals")
-    public ResponseEntity<ResponseStructure<HospitalResponse>> addHospital(@RequestBody @Valid HospitalRequest hospitalRequest){
-        HospitalResponse hospitalResponse = hospitalService.addHospital(hospitalRequest);
-        return responseBuilder.success(HttpStatus.CREATED, "Hospital Created", hospitalResponse);
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN')")
+    @PostMapping("/hospitals-admin/{adminId}")
+    public ResponseEntity<ResponseStructure<HospitalResponse>> addAdminHospital(@RequestBody HospitalRequest hospitalRequest, @PathVariable int adminId){
+        HospitalResponse hospitalResponse = hospitalService.addAdminHospital(hospitalRequest, adminId);
+        return responseBuilder.success(HttpStatus.CREATED, "Hospital Admin Created", hospitalResponse);
     }
 
     @GetMapping("/hospitals/{hospitalId}")
@@ -38,13 +38,6 @@ public class HospitalController {
     public ResponseEntity<ResponseStructure<HospitalResponse>> updateHospitalById(@PathVariable int hospitalId, @RequestBody @Valid HospitalRequest hospitalRequest){
         HospitalResponse hospitalResponse = hospitalService.updateHospitalById(hospitalId, hospitalRequest);
         return  responseBuilder.success(HttpStatus.OK, "Hospital Updated", hospitalResponse);
-    }
-
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN')")
-    @PostMapping("/hospitals-admin/{adminId}")
-    public ResponseEntity<ResponseStructure<HospitalResponse>> addAdminHospital(@RequestBody HospitalRequest hospitalRequest, @PathVariable int adminId){
-        HospitalResponse hospitalResponse = hospitalService.addAdminHospital(hospitalRequest, adminId);
-        return responseBuilder.success(HttpStatus.CREATED, "Hospital Admin Created", hospitalResponse);
     }
 
 
