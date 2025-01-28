@@ -24,4 +24,13 @@ public class Address {
     private String country;
     private int pincode;
 
+    @OneToOne(mappedBy = "address")
+    private User user;
+
+    @OneToOne(mappedBy = "address")
+    private Hospital hospital;
+
+    @OneToOne(mappedBy = "address")
+    private BloodBank bloodBank;
+
 }
