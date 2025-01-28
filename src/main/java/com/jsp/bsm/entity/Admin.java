@@ -21,4 +21,10 @@ public class Admin {
 
     @OneToOne
     private User user;
+
+    @ManyToOne
+    private BloodBank bloodBank;
+
+    @ManyToOne
+    private Hospital hospital;
 }

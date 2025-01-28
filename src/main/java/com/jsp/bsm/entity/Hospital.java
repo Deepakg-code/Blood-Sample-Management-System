@@ -20,9 +20,12 @@ public class Hospital {
     private int hospitalId;
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "hospital")
     private List<Admin> admin;
 
     @OneToOne
     private Address address;
+
+    @OneToMany(mappedBy = "hospital")
+    private List<Transaction> transaction;
 }

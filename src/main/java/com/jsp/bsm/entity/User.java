@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -39,4 +40,8 @@ public class User {
 
     @OneToOne
     private Address address;
+
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transaction;
+
 }
