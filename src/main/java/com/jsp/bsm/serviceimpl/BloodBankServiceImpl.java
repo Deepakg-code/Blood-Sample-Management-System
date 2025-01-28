@@ -1,5 +1,6 @@
 package com.jsp.bsm.serviceimpl;
 
+import com.jsp.bsm.entity.Address;
 import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.BloodBank;
 import com.jsp.bsm.enums.Role;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -52,16 +55,16 @@ public class BloodBankServiceImpl implements BloodBankService {
     }
 
     @Override
-    public List<BloodBankResponse> findAllBloodBank() {
-        List<BloodBank> bloodBanks = bloodRepository.findAll();
-        if(bloodBanks.isEmpty()){
-            throw new BloodBankNotFoundExceptionById("Failed to find blood banks in database");
-        } else {
-            return bloodBanks.stream()
-                    .map(this::mapToBloodBankResponse)
-                    .toList();
+    public List<BloodBankResponse> findAllBloodBankByCity(List<String> city) {
+        List<BloodBank> bloodBanks = bloodRepository.findByAddress_CityIn(city);
+        if (bloodBanks.isEmpty()) {
+            throw new RuntimeException("No blood banks found in the provided cities");
         }
+        return bloodBanks.stream()
+                .map(this::mapToBloodBankResponse) // Mapping each BloodBank to BloodBankResponse
+                .collect(Collectors.toList());
     }
+
 
     @Override
     public BloodBankResponse updateBloodBankById(int bankId, BloodBankRequest bankRequest) {
