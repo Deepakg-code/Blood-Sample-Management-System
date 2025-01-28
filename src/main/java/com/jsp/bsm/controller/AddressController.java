@@ -26,15 +26,15 @@ public class AddressController {
         return responseBuilder.success(HttpStatus.CREATED, "User Address Created", addressResponse);
     }
 
-    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
-    @PostMapping("address-hospital/{hospitalId}")
+    @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
+    @PostMapping("/address-hospital/{hospitalId}")
     public ResponseEntity<ResponseStructure<AddressResponse>> addHospitalAddress(@RequestBody AddressRequest addressRequest, @PathVariable int hospitalId){
         AddressResponse addressResponse = addressService.addHospitalAddress(addressRequest, hospitalId);
         return responseBuilder.success(HttpStatus.CREATED, "Hospital Address Created", addressResponse);
     }
 
     @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('OWNER_ADMIN')")
-    @PostMapping("address-bloodbank/{bloodbankId}")
+    @PostMapping("/address-bloodbank/{bloodbankId}")
     public ResponseEntity<ResponseStructure<AddressResponse>> addBloodbankAddress(@RequestBody AddressRequest addressRequest, @PathVariable int bloodbankId){
         AddressResponse addressResponse = addressService.addBloodbankAddress(addressRequest, bloodbankId);
         return responseBuilder.success(HttpStatus.CREATED, "Blood Bank Address Created", addressResponse);
