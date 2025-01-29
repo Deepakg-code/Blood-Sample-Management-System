@@ -20,11 +20,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,15 +48,33 @@ public class BloodBankServiceImpl implements BloodBankService {
         return bloodBank;
     }
 
+//    private BloodBankPageResponse mapToBloodBankPageResponse(BloodBank bloodBank, List<BloodGroup> requestedBloodGroups) {
+//        return BloodBankPageResponse.builder()
+//                .bankId(bloodBank.getBankId())
+//                .name(bloodBank.getName())
+//                .address(mapToAddressResponse(bloodBank.getAddress()))
+//                .samples(bloodBank.getSamples().stream()
+//                        .filter(sample -> requestedBloodGroups.contains(sample.getBloodGroup()))
+//                        .map(this::mapToSampleResponse)
+//                        .collect(Collectors.toList()))
+//                .build();
+//    }
+
     private BloodBankPageResponse mapToBloodBankPageResponse(BloodBank bloodBank, List<BloodGroup> requestedBloodGroups) {
+        if (bloodBank == null) return null;
+
         return BloodBankPageResponse.builder()
                 .bankId(bloodBank.getBankId())
                 .name(bloodBank.getName())
                 .address(mapToAddressResponse(bloodBank.getAddress()))
-                .samples(bloodBank.getSamples().stream()
-                        .filter(sample -> requestedBloodGroups.contains(sample.getBloodGroup())) // 🔥 Filter by requested blood groups
-                        .map(this::mapToSampleResponse)
-                        .collect(Collectors.toList()))
+                .samples(Optional.ofNullable(bloodBank.getSamples())
+                        .map(samples -> samples.stream()
+                                .filter(sample -> sample != null &&
+                                        requestedBloodGroups.contains(sample.getBloodGroup()))
+                                .map(this::mapToSampleResponse)
+                                .filter(Objects::nonNull)
+                                .collect(Collectors.toList()))
+                        .orElse(Collections.emptyList()))
                 .build();
     }
 
@@ -99,7 +116,7 @@ public class BloodBankServiceImpl implements BloodBankService {
 
     @Override
     public List<BloodBankPageResponse> findAllBloodBankByCity(List<String> city, List<BloodGroup> bloodGroups, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "name"));
         Page<BloodBank> bloodBanks = bloodRepository.findByAddress_CityInAndSamples_BloodGroupIn(city, bloodGroups, pageable);
 
         if (bloodBanks.isEmpty()) {
@@ -110,64 +127,9 @@ public class BloodBankServiceImpl implements BloodBankService {
         }
 
         return bloodBanks.getContent().stream()
-                .map(bloodBank -> mapToBloodBankPageResponse(bloodBank, bloodGroups)) // 🔥 Pass the blood groups for filtering
+                .map(bloodBank -> mapToBloodBankPageResponse(bloodBank, bloodGroups))
                 .collect(Collectors.toList());
     }
-
-//@Override
-//public List<BloodBankPageResponse> findAllBloodBankByCity(List<String> city, List<BloodGroup> bloodGroups, int page, int size) {
-//    Pageable pageable = PageRequest.of(page, size);
-//
-//    Page<BloodBank> bloodBanks = bloodRepository.findByAddress_CityInAndSamples_BloodGroupIn(city, bloodGroups, pageable);
-//
-//    if (bloodBanks.isEmpty()) {
-//        throw new BloodBankNotFoundExceptionById("No blood banks found in the provided cities and blood groups.");
-//    }
-//
-//    List<BloodBank> bloodbanks = bloodBanks.toList();
-//
-//    List<BloodBankResponse> bloodBankResponses = new ArrayList<>();
-//    List<BloodBankPageResponse> bloodBankPageResponses = new ArrayList<>();
-//
-//    for (BloodBank bloodBank:bloodbanks) {
-//        List<Sample> samples = sampleRepository.findByBloodBankAndBloodGroupIn(bloodBank,bloodGroups);
-//        List<SampleResponse> sampleResponses=new ArrayList<>();
-//        for (Sample sample:samples){
-//            sampleResponses.add(this.mapToSampleRes(sample));
-//        }
-//
-//        bloodBankPageResponses.add(mapToBloodBankPageMapper(bloodBank, sampleResponses));
-//    }
-//
-//    return bloodBankPageResponses;
-//}
-//    private BloodBankPageResponse mapToBloodBankPageMapper(BloodBank bloodBank, List<SampleResponse> sampleResponses) {
-//        return BloodBankPageResponse.builder().bankId(bloodBank.getBankId())
-//                .name(bloodBank.getName())
-//                .address(this.mapToAddressRes(bloodBank.getAddress()))
-//                .samples(sampleResponses)
-//                .build();
-//    }
-//
-//    public SampleResponse mapToSampleRes(Sample sample) {
-//        return SampleResponse.builder()
-//                .sampleId(sample.getSampleId())
-//                .bloodGroup(sample.getBloodGroup())
-//                .quantity(sample.getQuantity())
-//                .build();
-//    }
-//
-//    public AddressResponse mapToAddressRes(Address address) {
-//        return AddressResponse.builder()
-//                .addressId(address.getAddressId())
-//                .addressLine(address.getAddressLine())
-//                .landmark(address.getLandmark())
-//                .area(address.getArea())
-//                .state(address.getState())
-//                .country(address.getCountry())
-//                .pincode(address.getPincode())
-//                .build();
-//    }
 
     @Override
     public BloodBankResponse updateBloodBankById(int bankId, BloodBankRequest bankRequest) {
