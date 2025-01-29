@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface BloodRepository extends JpaRepository<BloodBank, Integer> {
 
 //    public List<BloodBank> findByAddress_CityIn(List<String> cities);
-List<BloodBank> findByAddress_CityInAndSamples_BloodGroup(List<String> cities, BloodGroup bloodGroup);
+List<BloodBank> findByAddress_CityInAndSamples_BloodGroupIn(List<String> cities, List<BloodGroup> bloodGroups);
 
 }
