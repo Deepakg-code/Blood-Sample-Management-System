@@ -5,6 +5,7 @@ import com.jsp.bsm.enums.BloodGroup;
 import com.jsp.bsm.requestdto.BloodBankRequest;
 import com.jsp.bsm.requestdto.HospitalRequest;
 import com.jsp.bsm.requestdto.UserRequest;
+import com.jsp.bsm.responsedto.BloodBankPageResponse;
 import com.jsp.bsm.responsedto.BloodBankResponse;
 import com.jsp.bsm.responsedto.HospitalResponse;
 import com.jsp.bsm.responsedto.UserResponse;
@@ -41,8 +42,8 @@ public class BloodBankController {
     }
 
     @GetMapping("/blood-banks")
-    public ResponseEntity<ResponseStructure<List<BloodBankResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam List<BloodGroup> bloodGroup){
-        List<BloodBankResponse> bankResponse = bankService.findAllBloodBankByCity(city, bloodGroup);
+    public ResponseEntity<ResponseStructure<List<BloodBankPageResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam List<BloodGroup> bloodGroup, @RequestParam int page, @RequestParam int size){
+        List<BloodBankPageResponse> bankResponse = bankService.findAllBloodBankByCity(city, bloodGroup, page, size);
         return responseBuilder.success(HttpStatus.FOUND, "BloodBanks Found", bankResponse);
     }
 
