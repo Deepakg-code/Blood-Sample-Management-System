@@ -41,7 +41,7 @@ public class BloodBankController {
     }
 
     @GetMapping("/blood-banks")
-    public ResponseEntity<ResponseStructure<List<BloodBankResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam BloodGroup bloodGroup){
+    public ResponseEntity<ResponseStructure<List<BloodBankResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam List<BloodGroup> bloodGroup){
         List<BloodBankResponse> bankResponse = bankService.findAllBloodBankByCity(city, bloodGroup);
         return responseBuilder.success(HttpStatus.FOUND, "BloodBanks Found", bankResponse);
     }

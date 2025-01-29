@@ -46,8 +46,8 @@ public class BloodBankServiceImpl implements BloodBankService {
     }
 
     @Override
-    public List<BloodBankResponse> findAllBloodBankByCity(List<String> city, BloodGroup bloodGroup) {
-        List<BloodBank> bloodBanks = bloodRepository.findByAddress_CityInAndSamples_BloodGroup(city, bloodGroup);
+    public List<BloodBankResponse> findAllBloodBankByCity(List<String> city, List<BloodGroup> bloodGroups) {
+        List<BloodBank> bloodBanks = bloodRepository.findByAddress_CityInAndSamples_BloodGroupIn(city, bloodGroups);
         if (bloodBanks.isEmpty()) {
             throw new BloodBankNotFoundExceptionById("No blood banks found in the provided cities and bloodGroup");
         }

@@ -11,7 +11,7 @@ public interface BloodBankService {
 
     BloodBankResponse findBloodBankById(int bankId);
 
-    List<BloodBankResponse> findAllBloodBankByCity(List<String> city, BloodGroup bloodGroup);
+    List<BloodBankResponse> findAllBloodBankByCity(List<String> city, List<BloodGroup> bloodGroup);
 
     BloodBankResponse updateBloodBankById(int bankId, BloodBankRequest bankRequest);
 
