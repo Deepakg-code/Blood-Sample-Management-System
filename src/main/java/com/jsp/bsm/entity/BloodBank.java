@@ -28,7 +28,7 @@ public class BloodBank {
     @OneToOne
     private Address address;
 
-    @OneToMany(mappedBy = "bloodBank")
+    @OneToMany(mappedBy = "bloodBank", fetch = FetchType.EAGER)
     private List<Sample> samples;
 
 }

@@ -24,13 +24,13 @@ public class Address {
     private String country;
     private int pincode;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address",fetch = FetchType.EAGER)
     private User user;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", fetch = FetchType.EAGER)
     private Hospital hospital;
 
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", fetch = FetchType.EAGER)
     private BloodBank bloodBank;
 
 }
