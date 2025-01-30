@@ -44,4 +44,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Transaction> transaction;
 
+    @OneToMany(mappedBy = "user")
+    private  List<Survey> surveys;
+
 }
