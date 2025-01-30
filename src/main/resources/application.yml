@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: blood-sample-management-api
+  datasource:
+    username: root
+    password: deepak
+    url: jdbc:mysql://localhost:3306/bsm_db?createDatabaseIfNotExist=true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+server:
+  port: 8081
