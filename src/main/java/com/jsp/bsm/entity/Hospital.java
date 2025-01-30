@@ -28,4 +28,7 @@ public class Hospital {
 
     @OneToMany(mappedBy = "hospital")
     private List<Transaction> transaction;
+
+    @OneToMany
+    private List<DonationRequest> donationRequests;
 }

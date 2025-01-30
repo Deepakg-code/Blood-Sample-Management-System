@@ -31,4 +31,7 @@ public class BloodBank {
     @OneToMany(mappedBy = "bloodBank", fetch = FetchType.LAZY)
     private List<Sample> samples;
 
+    @OneToMany
+    private List<DonationRequest> donationRequests;
+
 }
