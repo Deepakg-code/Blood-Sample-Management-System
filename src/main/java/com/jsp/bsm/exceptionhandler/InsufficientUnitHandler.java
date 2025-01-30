@@ -17,7 +17,7 @@ public class InsufficientUnitHandler {
     private final RestResponseBuilder responseBuilder;
 
     @ExceptionHandler(InsufficientUnitException.class)
-    public<T> ResponseEntity<ErrorStructure<String>> handleUserNotFoundById(InsufficientUnitException ex){
+    public<T> ResponseEntity<ErrorStructure<String>> handleInsufficientUnit(InsufficientUnitException ex){
         return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage(), "EmergencyUnits not available");
     }
 }
