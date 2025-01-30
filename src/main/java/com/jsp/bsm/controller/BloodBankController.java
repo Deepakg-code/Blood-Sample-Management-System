@@ -10,10 +10,12 @@ import com.jsp.bsm.responsedto.BloodBankResponse;
 import com.jsp.bsm.responsedto.HospitalResponse;
 import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.BloodBankService;
+import com.jsp.bsm.utility.PageStructure;
 import com.jsp.bsm.utility.ResponseStructure;
 import com.jsp.bsm.utility.RestResponseBuilder;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,9 +44,15 @@ public class BloodBankController {
     }
 
     @GetMapping("/blood-banks")
-    public ResponseEntity<ResponseStructure<List<BloodBankPageResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam List<BloodGroup> bloodGroup, @RequestParam int page, @RequestParam int size){
-        List<BloodBankPageResponse> bankResponse = bankService.findAllBloodBankByCity(city, bloodGroup, page, size);
-        return responseBuilder.success(HttpStatus.FOUND, "BloodBanks Found", bankResponse);
+    public ResponseEntity<PageStructure<List<BloodBankPageResponse>>> findAllBloodBankByCity(@RequestParam List<String> city, @RequestParam List<BloodGroup> bloodGroup, @RequestParam int page, @RequestParam int size){
+        Page<BloodBankPageResponse> bankResponse = bankService.findAllBloodBankByCity(city, bloodGroup, page, size);
+
+        return responseBuilder.success(HttpStatus.FOUND,
+                "BloodBanks Found",
+                bankResponse.toList(),
+                bankResponse.getNumber(),
+                bankResponse.getTotalPages(),
+                bankResponse.getSize());
     }
 
     @PreAuthorize("hasAnyAuthority('OWNER_ADMIN') || hasAnyAuthority('GUEST_ADMIN')")
