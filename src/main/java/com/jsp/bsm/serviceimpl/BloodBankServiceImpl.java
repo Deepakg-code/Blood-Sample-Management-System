@@ -83,15 +83,11 @@ public class BloodBankServiceImpl implements BloodBankService {
                 .bankId(bloodBank.getBankId())
                 .name(bloodBank.getName())
                 .address(AddressResponseMapper.mapToAddressResponse(bloodBank.getAddress()))
-                .samples(getSampleCollection(bloodBank, requestedBloodGroups))
+                .samples(bloodBank.getSamples().stream()
+                        .filter(sample -> requestedBloodGroups.contains(sample.getBloodGroup()))
+                        .map(SampleResponseMapper::mapToSampleResponse)
+                        .collect(Collectors.toList()))
                 .build();
-    }
-
-    private static List<SampleResponse> getSampleCollection(BloodBank bloodBank, List<BloodGroup> requestedBloodGroups) {
-        return bloodBank.getSamples().stream()
-                .filter(sample -> requestedBloodGroups.contains(sample.getBloodGroup()))
-                .map(SampleResponseMapper::mapToSampleResponse)
-                .collect(Collectors.toList());
     }
 
 
@@ -108,12 +104,15 @@ public class BloodBankServiceImpl implements BloodBankService {
     public BloodBankResponse addAdminBank(BloodBankRequest bankRequest, int adminId) {
         Admin admin = adminRepository.findById(adminId)
                 .orElseThrow(()-> new UserNotFoundExceptionById("Admin Not Found"));
-        BloodBank bloodBank = mapToBloodBank(bankRequest, new BloodBank());
+        BloodBank bloodBank = BloodBank.builder()
+                .name(bankRequest.getName())
+                .emergencyUnitCount(bankRequest.getEmergencyUnitCount())
+                .build();
         bloodRepository.save(bloodBank);
 
-//        List<Admin> admins = new ArrayList<>();
-//        admins.add(admin);
-//        bloodBank.setAdmin(admins);
+        List<Admin> admins = new ArrayList<>();
+        admins.add(admin);
+        bloodBank.setAdmin(admins);
 
         admin.setBloodBank(bloodBank);
         adminRepository.save(admin);
