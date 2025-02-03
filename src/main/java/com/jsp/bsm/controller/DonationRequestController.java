@@ -1,14 +1,10 @@
 package com.jsp.bsm.controller;
 
-import com.jsp.bsm.entity.DonationRequest;
 import com.jsp.bsm.requestdto.DonationRequestDTO;
-import com.jsp.bsm.requestdto.UserRequest;
 import com.jsp.bsm.responsedto.DonationRequestResponse;
-import com.jsp.bsm.responsedto.UserResponse;
 import com.jsp.bsm.service.DonationRequestService;
 import com.jsp.bsm.utility.ResponseStructure;
 import com.jsp.bsm.utility.RestResponseBuilder;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
