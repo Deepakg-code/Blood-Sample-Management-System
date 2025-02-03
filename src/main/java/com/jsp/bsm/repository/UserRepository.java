@@ -1,11 +1,15 @@
 package com.jsp.bsm.repository;
 
 import com.jsp.bsm.entity.User;
+import com.jsp.bsm.enums.BloodGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    public Optional<User> findByEmail(String username);
+    Optional<User> findByEmail(String username);
+
+    List<User> findByAvailableCityInAndBloodGroupIn(List<String> cities, List<BloodGroup> bloodGroup);
 }
