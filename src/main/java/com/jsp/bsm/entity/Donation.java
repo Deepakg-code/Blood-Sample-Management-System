@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -13,22 +15,17 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Hospital {
+public class Donation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int hospitalId;
-    private String name;
+    private int donationId;
+    private LocalDate date;
+    private LocalTime time;
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.EAGER)
-    private List<Admin> admin;
+    @ManyToOne
+    private User user;
 
-    @OneToOne
-    private Address address;
-
-    @OneToMany(mappedBy = "hospital")
-    private List<Transaction> transaction;
-
-    @OneToMany
+    @OneToMany(mappedBy = "donation")
     private List<DonationRequest> donationRequestList;
 }
