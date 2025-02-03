@@ -1,6 +1,7 @@
 package com.jsp.bsm.responsedto;
 
 import com.jsp.bsm.enums.BloodGroup;
+import com.jsp.bsm.enums.OrganizationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,6 @@ public class DonationRequestResponse {
     private LocalDate date;
     private LocalTime time;
     private List<BloodGroup> bloodGroup;
+    private List<String> cities;
 
 }

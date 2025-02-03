@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Urgent Blood Requirement</title>
+    <style>
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            border: 1px solid #e0e0e0;
+        }
+
+        .urgent-header {
+            background-color: #ff4444;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .summary-message {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            padding: 15px;
+            background-color: #fff3f3;
+            border-left: 4px solid #ff4444;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .org-details {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .org-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            margin: 12px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #333;
+            display: inline-block;
+            width: 140px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px 5px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .survey-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .donate-button {
+            background-color: #ff4444;
+            color: white;
+        }
+
+        .button-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .blood-group {
+            font-size: 20px;
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background-color: #fff3f3;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="urgent-header">
+        ⚠️ URGENT: Blood Required ⚠️
+    </div>
+
+    <div class="summary-message">
+        We have an urgent requirement for blood donation. Your contribution could save a life today. We are looking for donors with blood group <span class="highlight" th:text="${bloodGroup}">Blood Group</span>. Your immediate response would be greatly appreciated.
+    </div>
+
+    <div class="content">
+        <div class="org-details">
+            <div class="org-name" th:text="${organizationName}">Organization Name</div>
+            <div class="info-row">
+                <span class="label">Address:</span>
+                <span th:text="${organizationAddress}">Organization Address</span>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Blood Group Needed:</span>
+            <span class="blood-group" th:text="${bloodGroup}">Blood Group</span>
+        </div>
+
+        <div class="button-container">
+            <a th:href="${surveyLink}" class="button survey-button">
+                Take Up The Survey
+            </a>
+            <a th:href="${donateLink}" class="button donate-button">
+                I Want To Donate
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

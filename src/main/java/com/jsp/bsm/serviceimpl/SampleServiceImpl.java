@@ -4,6 +4,7 @@ import com.jsp.bsm.entity.BloodBank;
 import com.jsp.bsm.entity.Sample;
 import com.jsp.bsm.exception.BloodBankNotFoundExceptionById;
 import com.jsp.bsm.exception.SampleNotFoundException;
+import com.jsp.bsm.exception.UserNotFoundExceptionById;
 import com.jsp.bsm.repository.BloodRepository;
 import com.jsp.bsm.repository.SampleRepository;
 import com.jsp.bsm.requestdto.SampleRequest;
@@ -13,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -90,18 +92,15 @@ public class SampleServiceImpl implements SampleService {
         int requestedQuantity = sampleRequest.getQuantity();
 
         if (requestedQuantity >= emergencyUnitCount) {
-            // If the requested quantity is greater than or equal to the emergency unit count
             sample.setEmergencyUnits(emergencyUnitCount);
             sample.setAvailableUnits(requestedQuantity - emergencyUnitCount);
         } else {
-            // If the requested quantity is less than the emergency unit count
             sample.setEmergencyUnits(requestedQuantity);
             sample.setAvailableUnits(emergencyUnitCount - requestedQuantity);
         }
 
         sampleRepository.save(sample);
         return mapToSampleResponse(sample);
+
     }
-
-
 }

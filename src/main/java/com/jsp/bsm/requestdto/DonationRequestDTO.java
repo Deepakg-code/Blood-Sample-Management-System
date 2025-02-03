@@ -1,6 +1,7 @@
 package com.jsp.bsm.requestdto;
 
 import com.jsp.bsm.enums.BloodGroup;
+import com.jsp.bsm.enums.OrganizationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,6 @@ import java.util.List;
 @NoArgsConstructor
 public class DonationRequestDTO {
 
-    private LocalDate date;
-    private LocalTime time;
     private List<BloodGroup> bloodGroup;
+    private List<String> cities;
 }
