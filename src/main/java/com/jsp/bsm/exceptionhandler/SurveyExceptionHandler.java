@@ -1,7 +1,7 @@
 package com.jsp.bsm.exceptionhandler;
 
-import com.jsp.bsm.exception.HospitalNotFoundException;
-import com.jsp.bsm.exception.InsufficientUnitException;
+import com.jsp.bsm.exception.SampleNotFoundException;
+import com.jsp.bsm.exception.SurveyNotFoundException;
 import com.jsp.bsm.utility.ErrorStructure;
 import com.jsp.bsm.utility.RestResponseBuilder;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @AllArgsConstructor
-public class InsufficientUnitHandler {
+public class SurveyExceptionHandler {
 
     private final RestResponseBuilder responseBuilder;
 
-    @ExceptionHandler(InsufficientUnitException.class)
-    public<T> ResponseEntity<ErrorStructure<String>> handleInsufficientUnit(InsufficientUnitException ex){
-        return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage(), "EmergencyUnits not available");
+    @ExceptionHandler(SurveyNotFoundException.class)
+    public<T> ResponseEntity<ErrorStructure<String>> handleSurveyNotFoundById(SampleNotFoundException ex){
+        return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage(), "Survey Not Found By given Id");
     }
 }
