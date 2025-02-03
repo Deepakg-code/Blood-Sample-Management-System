@@ -44,7 +44,7 @@ public class SampleController {
     @PutMapping("/samples/{sampleId}")
     public ResponseEntity<ResponseStructure<SampleResponse>> updateSampleId(@PathVariable int sampleId, @RequestBody SampleRequest sampleRequest){
         SampleResponse sampleResponse = sampleService.updateSampleId(sampleId, sampleRequest);
-        return responseBuilder.success(HttpStatus.FOUND, "Sample Updated", sampleResponse);
+        return responseBuilder.success(HttpStatus.OK, "Sample Updated", sampleResponse);
     }
 
 }
