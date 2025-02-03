@@ -4,6 +4,7 @@ import com.jsp.bsm.entity.Admin;
 import com.jsp.bsm.entity.BloodBank;
 import com.jsp.bsm.entity.DonationRequest;
 import com.jsp.bsm.entity.Hospital;
+import com.jsp.bsm.enums.OrganizationType;
 import com.jsp.bsm.exception.BloodBankNotFoundExceptionById;
 import com.jsp.bsm.exception.HospitalNotFoundException;
 import com.jsp.bsm.repository.BloodRepository;
@@ -25,7 +26,6 @@ public class DonationRequestServiceImpl implements DonationRequestService {
 
     private final DonationRequestRepository donationRequestRepository;
     private final AuthUtil authUtil;
-
     private final HospitalRepository hospitalRepository;
     private final BloodRepository bloodRepository;
 
@@ -35,29 +35,28 @@ public class DonationRequestServiceImpl implements DonationRequestService {
                 .date(donationRequest.getDate())
                 .time(donationRequest.getTime())
                 .bloodGroup(donationRequest.getBloodGroup())
+                .cities(donationRequest.getCities())
                 .build();
     }
 
     private DonationRequest mapToDonationRequest(DonationRequestDTO donationRequestDTO, DonationRequest donationRequest) {
-        donationRequest.setDate(donationRequestDTO.getDate());
-        donationRequest.setTime(donationRequestDTO.getTime());
         donationRequest.setBloodGroup(donationRequestDTO.getBloodGroup());
+        donationRequest.setCities(donationRequestDTO.getCities());
         return donationRequest;
     }
 
     @Override
     public DonationRequestResponse addDonationRequestByHospital(DonationRequestDTO donationRequestDTO, int hospitalId) throws Exception {
-        Admin admin = authUtil.getCurrentAdmin();
+        DonationRequest donationRequest = mapToDonationRequest(donationRequestDTO, new DonationRequest());
         Hospital hospital = hospitalRepository.findById(hospitalId)
-                .orElseThrow(()-> new HospitalNotFoundException("failed to find the hospital"));
-        DonationRequest donationRequest = this.mapToDonationRequest(donationRequestDTO, new DonationRequest());
+                .orElseThrow(() -> new HospitalNotFoundException("Fail to find hospital"));
+
+        donationRequest.setOrganizationType(OrganizationType.HOSPITAL);
+        donationRequest.setHospital(hospital);
+        donationRequest.setRequestCompleted(false);
+
         DonationRequest savedRequest = donationRequestRepository.save(donationRequest);
-        List<DonationRequest> hospitalRequests = hospital.getDonationRequests();
-        if (hospitalRequests == null) {
-            hospitalRequests = new ArrayList<>();
-        }
-        hospitalRequests.add(savedRequest);
-        hospital.setDonationRequests(hospitalRequests);
+        hospital.getDonationRequestList().add(savedRequest);
         hospitalRepository.save(hospital);
 
         return mapToDonationRequestResponse(savedRequest);
@@ -65,17 +64,16 @@ public class DonationRequestServiceImpl implements DonationRequestService {
 
     @Override
     public DonationRequestResponse addDonationRequestByBloodBank(DonationRequestDTO donationRequestDTO, int bloodBankId) throws Exception {
-        Admin admin = authUtil.getCurrentAdmin();
-        BloodBank bloodBank = bloodRepository.findById(bloodBankId)
-                .orElseThrow(()-> new BloodBankNotFoundExceptionById("failed to find the blood bank"));
         DonationRequest donationRequest = this.mapToDonationRequest(donationRequestDTO, new DonationRequest());
+        BloodBank bloodBank = bloodRepository.findById(bloodBankId)
+                .orElseThrow(() -> new BloodBankNotFoundExceptionById("Failed to find the blood bank"));
+
+        donationRequest.setOrganizationType(OrganizationType.BLOODBANK);
+        donationRequest.setBloodBank(bloodBank);
+        donationRequest.setRequestCompleted(false);
+
         DonationRequest savedRequest = donationRequestRepository.save(donationRequest);
-        List<DonationRequest> bloodBankRequests = bloodBank.getDonationRequests();
-        if (bloodBankRequests == null) {
-            bloodBankRequests = new ArrayList<>();
-        }
-        bloodBankRequests.add(savedRequest);
-        bloodBank.setDonationRequests(bloodBankRequests);
+        bloodBank.getDonationRequestList().add(savedRequest);
         bloodRepository.save(bloodBank);
 
         return mapToDonationRequestResponse(savedRequest);
