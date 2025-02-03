@@ -16,7 +16,7 @@ public class BloodBankExceptionHandler {
     private final RestResponseBuilder responseBuilder;
 
     @ExceptionHandler(BloodBankNotFoundExceptionById.class)
-    public<T> ResponseEntity<ErrorStructure<String>> handleUserNotFoundById(BloodBankNotFoundExceptionById ex){
+    public<T> ResponseEntity<ErrorStructure<String>> handleBloodBankNotFoundById(BloodBankNotFoundExceptionById ex){
         return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage(), "Blood Bank Not Found By given Id");
     }
 }
