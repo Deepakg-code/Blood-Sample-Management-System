@@ -16,7 +16,7 @@ public class SampleExceptionHandler {
     private final RestResponseBuilder responseBuilder;
 
     @ExceptionHandler(SampleNotFoundException.class)
-    public<T> ResponseEntity<ErrorStructure<String>> handleSampleNotFoundById(SampleNotFoundException ex){
+    public<T> ResponseEntity<ErrorStructure<String>> handleUserNotFoundById(SampleNotFoundException ex){
         return responseBuilder.error(HttpStatus.NOT_FOUND, ex.getMessage(), "Sample Not Found By given Id");
     }
 }

@@ -20,7 +20,7 @@ public class Hospital {
     private int hospitalId;
     private String name;
 
-    @OneToMany(mappedBy = "hospital", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "hospital")
     private List<Admin> admin;
 
     @OneToOne
@@ -28,7 +28,4 @@ public class Hospital {
 
     @OneToMany(mappedBy = "hospital")
     private List<Transaction> transaction;
-
-    @OneToMany
-    private List<DonationRequest> donationRequestList;
 }

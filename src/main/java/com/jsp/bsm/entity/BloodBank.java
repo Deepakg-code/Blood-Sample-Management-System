@@ -22,16 +22,13 @@ public class BloodBank {
     private String name;
     private int emergencyUnitCount;
 
-    @OneToMany(mappedBy = "bloodBank", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "bloodBank")
     private List<Admin> admin;
 
     @OneToOne
     private Address address;
 
-    @OneToMany(mappedBy = "bloodBank", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bloodBank", fetch = FetchType.EAGER)
     private List<Sample> samples;
-
-    @OneToMany
-    private List<DonationRequest> donationRequestList;
 
 }
