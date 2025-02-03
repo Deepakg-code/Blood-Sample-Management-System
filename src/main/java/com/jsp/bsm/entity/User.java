@@ -44,7 +44,13 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Transaction> transaction;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private  List<Survey> surveys;
+
+    @OneToMany(mappedBy = "user")
+    private List<Donation> donations;
+
+    @OneToMany(mappedBy = "user")
+    private List<DonationLead> donationLeads;
 
 }

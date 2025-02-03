@@ -22,7 +22,7 @@ public class BloodBank {
     private String name;
     private int emergencyUnitCount;
 
-    @OneToMany(mappedBy = "bloodBank")
+    @OneToMany(mappedBy = "bloodBank", fetch = FetchType.EAGER)
     private List<Admin> admin;
 
     @OneToOne
@@ -32,6 +32,6 @@ public class BloodBank {
     private List<Sample> samples;
 
     @OneToMany
-    private List<DonationRequest> donationRequests;
+    private List<DonationRequest> donationRequestList;
 
 }

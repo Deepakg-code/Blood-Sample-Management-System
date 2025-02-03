@@ -1,10 +1,8 @@
 package com.jsp.bsm.entity;
 
 import com.jsp.bsm.enums.BloodGroup;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.jsp.bsm.enums.OrganizationType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DonationRequest{
+public class DonationRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,5 +25,26 @@ public class DonationRequest{
 
     private LocalDate date;
     private LocalTime time;
+
+
     private List<BloodGroup> bloodGroup;
+
+    private List<String> cities;
+
+    @Enumerated(EnumType.STRING)
+    private OrganizationType organizationType;
+
+    private boolean requestCompleted;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Hospital hospital;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private BloodBank bloodBank;
+
+    @ManyToOne
+    private Donation donation;
+
+    @ManyToOne
+    private DonationLead donationLead;
 }
