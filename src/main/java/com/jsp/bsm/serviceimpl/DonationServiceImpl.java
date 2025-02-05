@@ -3,6 +3,7 @@ package com.jsp.bsm.serviceimpl;
 import com.jsp.bsm.entity.Donation;
 import com.jsp.bsm.entity.DonationRequest;
 import com.jsp.bsm.entity.User;
+import com.jsp.bsm.exception.DonationNotFoundException;
 import com.jsp.bsm.repository.DonationRepository;
 import com.jsp.bsm.repository.DonationRequestRepository;
 import com.jsp.bsm.requestdto.DonationReq;
@@ -62,15 +63,20 @@ public class DonationServiceImpl implements DonationService {
 
     @Override
     public DonationResponse updateDonation(DonationReq donationReq, int donationId) {
+        User user = authUtil.getCurrentUser();
         Donation existingDonation = donationRepository.findById(donationId)
-                .orElseThrow(() -> new RuntimeException("Donation Not Found"));
+                .orElseThrow(() -> new DonationNotFoundException("Donation Not Found"));
+        if(user.getUserId()==existingDonation.getUser().getUserId()) {
+            existingDonation.setDate(donationReq.getDate());
+            existingDonation.setTime(donationReq.getTime());
 
-        existingDonation.setDate(donationReq.getDate());
-        existingDonation.setTime(donationReq.getTime());
+            Donation updatedDonation = donationRepository.save(existingDonation);
 
-        Donation updatedDonation = donationRepository.save(existingDonation);
-
-        return this.mapToDonationResponse(updatedDonation);
+            return this.mapToDonationResponse(updatedDonation);
+        }
+        else{
+            throw new DonationNotFoundException("No donation available by this donation id in your account");
+        }
     }
 
     @Override
