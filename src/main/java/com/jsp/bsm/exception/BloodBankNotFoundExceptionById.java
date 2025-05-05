@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class BloodBankNotFoundExceptionById extends RuntimeException {
+public class BloodBankNotFoundByIdException extends Exception {
     private final String message;
 }
