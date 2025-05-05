@@ -21,11 +21,8 @@ import java.time.LocalDate;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final AdminRepository adminRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final AuthUtil authUtil;
 
     private UserResponse mapToUserResponse(User user) {
@@ -47,16 +44,21 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setAge(userRequest.getAge());
         user.setEmail(userRequest.getEmail());
-        user.setPassword(userRequest.getPassword());
-        user.setBloodGroup(userRequest.getBloodGroup());user.setGender(userRequest.getGender());
+        user.setBloodGroup(userRequest.getBloodGroup());
+        user.setGender(userRequest.getGender());
         user.setAvailableCity(userRequest.getAvailableCity());
         user.setLastDonatedAt(userRequest.getLastDonatedAt());
+
+        // Encode password if it has been changed
+        if (!userRequest.getPassword().equals(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
+
         return user;
     }
 
     @Override
     public UserResponse addUser(UserRequest userRequest) {
-        // Mapping userRequest to user entity
         User user = this.mapToUser(userRequest, new User());
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -68,8 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse findUserById() {
         User user = authUtil.getCurrentUser();
-            return mapToUserResponse(user);
-
+        return mapToUserResponse(user);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse verifyStatus(int userId, boolean status) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()-> new UserNotFoundExceptionById("Failed to find the user"));
+                .orElseThrow(() -> new UserNotFoundExceptionById("Failed to find the user"));
         user.setVerified(status);
         userRepository.save(user);
         return this.mapToUserResponse(user);
